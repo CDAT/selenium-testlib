@@ -18,13 +18,16 @@ aliases:
        export PATH=$WORKDIR/miniconda/bin:$PATH
        echo "*** setup_selenium_testlib_env ***"
        conda create -q -n selenium_testlib $CHANNELS $PKGS "python=3.7"
+       pip install selenium
+       pip install pyvirtualdisplay
 
   - &run_tests
     name: run_tests
     command: | 
        export PATH=$WORKDIR/miniconda/bin:$PATH
        echo "**** run_tests ****"
-       python run_tests.py -n 4 -H -v2
+       source activate selenium_testlib
+       python run_tests.py -H -v2
     
 jobs:
    linux_selenium_testlib:
