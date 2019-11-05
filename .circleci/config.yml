@@ -1,8 +1,10 @@
 version: 2
+
 aliases:
   - &setup_miniconda
     name: setup_miniconda
     command: |
+       echo "**** setup_miniconda ***"
        mkdir -p workspace
        git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
        python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
@@ -14,22 +16,24 @@ aliases:
        PKGS: "cdat_info testsrunner"
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
-       conda create -q -n $PY_VER $CHANNELS $PKGS "python=3.7"
+       echo "*** setup_selenium_testlib_env ***"
+       conda create -q -n selenium_testlib $CHANNELS $PKGS "python=3.7"
 
   - &run_tests
     name: run_tests
     command: | 
        export PATH=$WORKDIR/miniconda/bin:$PATH
-       echo "*** run_tests ***"
+       echo "**** run_tests ****"
        python run_tests.py -n 4 -H -v2
     
 jobs:
    linux_selenium_testlib:
       docker:
-         circleci/node:stretch-browsers
+         - image: circleci/node:stretch-browsers
+      environment:
+         WORKDIR: "workdir"
       steps:
          - checkout 
-         - run: echo 'export PATH=$WORKDIR/miniconda/bin:$PATH' >> $BASH_ENV
          - run: *setup_miniconda
          - run: *setup_selenium_testlib_env
          - run: *run_tests    
