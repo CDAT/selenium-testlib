@@ -4,7 +4,7 @@ aliases:
   - &setup_miniconda
     name: setup_miniconda
     command: |
-       echo "**** setup_miniconda ***"
+       echo "*** setup_miniconda ***"
        mkdir -p workspace
        git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
        python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
