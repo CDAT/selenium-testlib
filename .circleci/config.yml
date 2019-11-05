@@ -18,11 +18,15 @@ aliases:
        export PATH=$WORKDIR/miniconda/bin:$PATH
        echo "*** setup_selenium_testlib_env ***"
        conda create -q -n selenium_testlib $CHANNELS $PKGS "python=3.7"
+       source activate selenium_testlib
        pip install selenium
        pip install pyvirtualdisplay
 
   - &run_tests
     name: run_tests
+    environment:
+      BROWSER_TYPE: "chrome"
+      BROWSER_DRIVER: "/usr/local/bin/chromedriver"
     command: | 
        export PATH=$WORKDIR/miniconda/bin:$PATH
        echo "*** run_tests ****"
