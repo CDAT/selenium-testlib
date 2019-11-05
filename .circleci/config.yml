@@ -20,6 +20,7 @@ aliases:
     name: run_tests
     command: | 
        export PATH=$WORKDIR/miniconda/bin:$PATH
+       echo "*** run_tests ***"
        python run_tests.py -n 4 -H -v2
     
 jobs:
