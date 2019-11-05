@@ -25,7 +25,7 @@ aliases:
     name: run_tests
     command: | 
        export PATH=$WORKDIR/miniconda/bin:$PATH
-       echo "**** run_tests ****"
+       echo "*** run_tests ****"
        source activate selenium_testlib
        python run_tests.py -H -v2
     
