@@ -1,0 +1,27 @@
+package:
+    name: selenium-testlib
+    version: "@VERSION@"
+
+source:
+    git_rev: @UVCDAT_BRANCH@
+    git_url: https://github.com/cdat/selenium-testlib.git
+
+build:
+  number: @BUILD_NUMBER@
+  noarch: python
+  script: python setup.py install
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - pip
+  run:
+    - python
+    - selenium
+
+about:
+    home:  http://github.com/cdat/vcs
+    summary: Allows web developers to easily add selenium test cases.
+    license: BSD
+    license_file: bsd-3-clause.txt
