@@ -4,23 +4,46 @@ aliases:
   - &setup_miniconda
     name: setup_miniconda
     command: |
-       echo "*** setup_miniconda ***"
        mkdir -p workspace
-       git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
+       git clone -b validateNightly git@github.com:CDAT/cdat workspace/cdat
+       # install_miniconda.py installs miniconda3 under $WORKDIR/miniconda
        python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+
+  - &conda_rerender
+    name: conda_rerender
+    command: |
+       git clone -b conda_forge_pinning https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
+       python $BUILD_SCRIPT -w $WORKDIR -l $LAST_STABLE -B 0 -p $PKG_NAME -b $CIRCLE_BRANCH --do_rerender
+
+  - &conda_build
+    name: conda_build
+    command: |
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       conda config --add channels conda-forge --force
+       conda config --add channels cdat/label/nightly --force
+       conda config --set channel_priority strict
+       cat ~/.condarc
+       BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
+       python $BUILD_SCRIPT -w $WORKDIR -p $PKG_NAME --build_version $BUILD_VARIANT_VER --do_build
 
   - &setup_selenium_testlib_env
     name: setup_selenium_testlib_env
     environment:
-       CHANNELS: "-c cdat/label/nightly -c conda-forge"
        PKGS: "cdat_info testsrunner"
+       CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
        echo "*** setup_selenium_testlib_env ***"
-       conda create -q -n selenium_testlib $CHANNELS $PKGS "python=3.7"
-       source activate selenium_testlib
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       conda create -q -n $ENV_NAME $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS
+       conda activate $ENV_NAME
        pip install selenium
        pip install pyvirtualdisplay
+       conda list
 
   - &run_tests
     name: run_tests
@@ -30,7 +53,8 @@ aliases:
     command: | 
        export PATH=$WORKDIR/miniconda/bin:$PATH
        echo "*** run_tests ****"
-       source activate selenium_testlib
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate $ENV_NAME
        python run_tests.py -H -v2
     
 jobs:
@@ -39,9 +63,16 @@ jobs:
          - image: circleci/node:stretch-browsers
       environment:
          WORKDIR: "workdir"
+         PKG_NAME: "selenium-testlib"
+         ENV_NAME: "selenium-testlib"
+         LAST_STABLE: "1.0"
+         CONDA_PY_VER: "python>=3.7,<3.8"
+         BUILD_VARIANT_VER: "3.7"
       steps:
          - checkout 
          - run: *setup_miniconda
+         - run: *conda_rerender
+         - run: *conda_build
          - run: *setup_selenium_testlib_env
          - run: *run_tests    
 

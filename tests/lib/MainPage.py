@@ -24,4 +24,5 @@ class MainPage(ActionsPage):
         return input_area_element
 
     def search(self, search_input_area_element, text_to_search):
+        print("...MainPage.search()...for '{}'".format(text_to_search))
         self.enter_text(search_input_area_element, text_to_search)

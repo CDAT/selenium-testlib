@@ -10,7 +10,7 @@ sys.path.append(os.path.join(this_dir, 'lib'))
 from BaseTestCase import BaseTestCase
 from MainPage import MainPage
 
-class TestOpenBrowser(BaseTestCase):
+class TestBasic(BaseTestCase):
 
     def test_google_search(self):
         main_page = MainPage(self.driver, "https://www.google.com")
