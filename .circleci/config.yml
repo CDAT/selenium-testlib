@@ -62,7 +62,7 @@ jobs:
       docker:
          - image: circleci/node:stretch-browsers
       environment:
-         WORKDIR: "workdir"
+         WORKDIR: "/home/circleci/project/linux_build"
          PKG_NAME: "selenium-testlib"
          ENV_NAME: "selenium-testlib"
          LAST_STABLE: "1.0"
@@ -72,6 +72,7 @@ jobs:
          - checkout 
          - run: *setup_miniconda
          - run: *conda_rerender
+         - run: ls -l $WORKDIR/selenium-testlib/.ci_support
          - run: *conda_build
          - run: *setup_selenium_testlib_env
          - run: *run_tests    
