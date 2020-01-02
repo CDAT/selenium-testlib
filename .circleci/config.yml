@@ -39,7 +39,7 @@ aliases:
        echo "*** setup_selenium_testlib_env ***"
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
-       conda create -q -n $ENV_NAME $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS
+       conda create -y -n $ENV_NAME --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS
        conda activate $ENV_NAME
        pip install selenium
        pip install pyvirtualdisplay
