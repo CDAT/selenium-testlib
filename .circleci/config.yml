@@ -67,7 +67,7 @@ jobs:
          ENV_NAME: "selenium-testlib"
          LAST_STABLE: "1.0"
          CONDA_PY_VER: "python>=3.7,<3.8"
-         BUILD_VARIANT_VER: "3.7"
+         BUILD_VARIANT_VER: "noarch"
       steps:
          - checkout 
          - run: *setup_miniconda
