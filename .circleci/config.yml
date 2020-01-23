@@ -12,7 +12,7 @@ aliases:
   - &conda_rerender
     name: conda_rerender
     command: |
-       git clone -b conda_forge_pinning https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
+       git clone https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
@@ -56,8 +56,35 @@ aliases:
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate $ENV_NAME
        python run_tests.py -H -v2
-    
+
+  - &conda_upload
+    name: conda_upload
+    command: |
+       #if [[ $CIRCLE_BRANCH != "master" ]]; then
+       #   exit 0
+       #fi
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       UPLOAD_OPTIONS="-t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL"
+       anaconda $UPLOAD_OPTIONS $WORKDIR/miniconda/conda-bld/noarch/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
+
 jobs:
+   upload:
+      machine:
+         image: circleci/classic:latest
+      environment:
+         WORKDIR: /home/circleci/project/linux_build
+         PKG_NAME: "selenium_testlib"
+         VERSION: "1.0"
+         USER: "cdat"
+         LABEL: "nightly"
+      steps:
+         - attach_workspace:
+              at: .
+         - run: pwd
+         - run: *conda_upload
+
+    
    linux_selenium_testlib:
       docker:
          - image: circleci/node:stretch-browsers
@@ -82,3 +109,6 @@ workflows:
    selenium_testlib:
       jobs:
          - linux_selenium_testlib
+         - upload:
+              requires:
+                 - linux_selenium_testlib
