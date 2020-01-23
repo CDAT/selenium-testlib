@@ -69,22 +69,6 @@ aliases:
        anaconda $UPLOAD_OPTIONS $WORKDIR/miniconda/conda-bld/noarch/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
 
 jobs:
-   upload:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build
-         PKG_NAME: "selenium_testlib"
-         VERSION: "1.0"
-         USER: "cdat"
-         LABEL: "nightly"
-      steps:
-         - attach_workspace:
-              at: .
-         - run: pwd
-         - run: *conda_upload
-
-    
    linux_selenium_testlib:
       docker:
          - image: circleci/node:stretch-browsers
@@ -102,7 +86,26 @@ jobs:
          - run: ls -l $WORKDIR/selenium-testlib/.ci_support
          - run: *conda_build
          - run: *setup_selenium_testlib_env
-         - run: *run_tests    
+         - run: *run_tests
+         - persist_to_workspace:
+              root: .
+              paths: 
+                 - linux_build
+
+   upload:
+      machine:
+         image: circleci/classic:latest
+      environment:
+         WORKDIR: "/home/circleci/project/linux_build"
+         PKG_NAME: "selenium_testlib"
+         VERSION: "1.0"
+         USER: "cdat"
+         LABEL: "nightly"
+      steps:
+         - attach_workspace:
+              at: .
+         - run: pwd
+         - run: *conda_upload
 
 workflows:
    version: 2
