@@ -97,7 +97,7 @@ jobs:
          image: circleci/classic:latest
       environment:
          WORKDIR: "/home/circleci/project/linux_build"
-         PKG_NAME: "selenium_testlib"
+         PKG_NAME: "selenium-testlib"
          VERSION: "1.0"
          USER: "cdat"
          LABEL: "nightly"
