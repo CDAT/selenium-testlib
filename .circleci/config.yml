@@ -74,7 +74,7 @@ jobs:
          - image: circleci/node:stretch-browsers
       environment:
          WORKDIR: "/home/circleci/project/linux_build"
-         PKG_NAME: "selenium-testlib"
+         PKG_NAME: "selenium_testlib"
          ENV_NAME: "selenium-testlib"
          LAST_STABLE: "1.0"
          CONDA_PY_VER: "python>=3.7,<3.8"
@@ -97,7 +97,7 @@ jobs:
          image: circleci/classic:latest
       environment:
          WORKDIR: "/home/circleci/project/linux_build"
-         PKG_NAME: "selenium-testlib"
+         PKG_NAME: "selenium_testlib"
          VERSION: "1.0"
          USER: "cdat"
          LABEL: "nightly"
