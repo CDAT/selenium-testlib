@@ -105,6 +105,10 @@ jobs:
          - attach_workspace:
               at: .
          - run: pwd
+         - run: ls -l linux_build
+         - run: ls -l linux_build/miniconda
+         - run: ls -l linux_build/miniconda/conda-bld
+         - run: ls -l linux_build/miniconda/conda-bld/noarch
          - run: *conda_upload
 
 workflows:
