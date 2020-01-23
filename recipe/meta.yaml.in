@@ -1,5 +1,5 @@
 package:
-    name: selenium-testlib
+    name: selenium_testlib
     version: "@VERSION@"
 
 source:
