@@ -16,7 +16,7 @@ aliases:
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
-       python $BUILD_SCRIPT -w $WORKDIR -l $LAST_STABLE -B 0 -p $PKG_NAME -b $CIRCLE_BRANCH --do_rerender
+       python $BUILD_SCRIPT -w $WORKDIR -l $LAST_STABLE -B 0 -p $PKG_NAME -r $REPO_NAME -b $CIRCLE_BRANCH --do_rerender
 
   - &conda_build
     name: conda_build
@@ -28,7 +28,7 @@ aliases:
        conda config --set channel_priority strict
        cat ~/.condarc
        BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
-       python $BUILD_SCRIPT -w $WORKDIR -p $PKG_NAME --build_version $BUILD_VARIANT_VER --do_build
+       python $BUILD_SCRIPT -w $WORKDIR -p $PKG_NAME -r $REPO_NAME --build_version $BUILD_VARIANT_VER --do_build
 
   - &setup_selenium_testlib_env
     name: setup_selenium_testlib_env
@@ -75,6 +75,7 @@ jobs:
       environment:
          WORKDIR: "/home/circleci/project/linux_build"
          PKG_NAME: "selenium_testlib"
+         REPO_NAME: "selenium-testlib"
          ENV_NAME: "selenium-testlib"
          LAST_STABLE: "1.0"
          CONDA_PY_VER: "python>=3.7,<3.8"
