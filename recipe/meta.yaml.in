@@ -19,6 +19,7 @@ requirements:
   run:
     - python
     - selenium
+    - pyvirtualdisplay
 
 about:
     home:  http://github.com/cdat/vcs
