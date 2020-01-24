@@ -1,4 +1,6 @@
-from .testlib.PageObjects import Actions
-from .testlib.PageObjects import ActionsPage
+from .PageObjects.Actions import Actions
+from .PageObjects.Actions import ActionsPage
+from .TestUtils.BaseTestCase import BaseTestCase
+
 
 
