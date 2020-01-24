@@ -8,8 +8,8 @@ sys.path.append(os.path.join(this_dir, '..', 'PageObjects'))
 import unittest
 import tempfile
 
-from testlib.PageObjects import Actions
-from testlib.PageObjects import ActionsPage
+from testlib.PageObjects.Actions import Actions
+from testlib.PageObjects.ActionsPage import ActionsPage
 
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
